@@ -37,56 +37,112 @@
 <h1>S3C – Sistema de Control de Crédito a Cliente</h1>
 
 <p>
-Sistema interno desarrollado para tienda departamental (lote de autos y mueblería),
-integrado con el ERP Microsip.
+Sistema desarrollado en <strong>Java</strong> como capa de validación previa
+a la habilitación de crédito en el ERP empresarial.
+Integrado directamente con Microsip mediante conexión a base de datos.
 </p>
 
 <hr>
 
-<h2>Contexto</h2>
+<h2>Contexto de Negocio</h2>
 
 <p>
-La empresa requería garantizar que únicamente clientes con información completa y validada
-pudieran ser habilitados para financiamiento a plazos dentro del ERP.
+La organización operaba con financiamiento a plazos en dos sucursales
+(lote de autos y mueblería). Se requería garantizar que únicamente clientes
+con información completa y validada pudieran ser habilitados para crédito.
+</p>
+
+<p>
+El ERP permitía operaciones comerciales, pero no gestionaba control avanzado
+de integridad ni validación previa de expediente.
 </p>
 
 <hr>
 
-<h2>Arquitectura Técnica</h2>
+<h2>Arquitectura General</h2>
 
-<h3>Base de Datos</h3>
+<h3>Tecnologías</h3>
 <ul>
-    <li>Motor: Firebird</li>
-    <li>Base independiente para información extendida del cliente</li>
-    <li>Conexión directa a base de datos de Microsip</li>
+    <li>Lenguaje: Java</li>
+    <li>Base de datos: Firebird</li>
+    <li>Reporting: JasperReports</li>
+    <li>Arquitectura: Cliente-Servidor</li>
 </ul>
 
 <h3>Modelo de Integración</h3>
 <ul>
-    <li>Lectura y actualización directa en base de datos del ERP</li>
-    <li>Uso de transacciones explícitas</li>
-    <li>Rollback ante errores</li>
+    <li>Base de datos independiente para información extendida del cliente.</li>
+    <li>Conexión directa a base de datos del ERP para lectura y actualización.</li>
+    <li>Uso de transacciones explícitas para garantizar atomicidad y consistencia.</li>
 </ul>
 
 <hr>
 
-<h2>Lógica de Negocio</h2>
+<h2>Decisiones de Arquitectura</h2>
 
 <ul>
-    <li>Validación de campos obligatorios</li>
-    <li>Detección de clientes duplicados</li>
-    <li>Control manual de habilitación</li>
-    <li>Separación entre evaluación financiera y operación comercial</li>
+    <li>Separación de responsabilidades entre evaluación financiera y operación comercial.</li>
+    <li>Desacoplamiento de datos sensibles en base independiente.</li>
+    <li>Actualización manual controlada para evitar habilitación accidental.</li>
+    <li>Control de integridad previo a sincronización con ERP.</li>
 </ul>
 
 <hr>
 
-<h2>Modelo Multiusuario</h2>
+<h2>Control Transaccional</h2>
+
+<p>
+Las actualizaciones hacia el ERP se ejecutan dentro de transacciones explícitas
+en Firebird, garantizando:
+</p>
 
 <ul>
-    <li>Arquitectura cliente-servidor</li>
-    <li>Roles: Administrador / Capturista</li>
-    <li>Operación concurrente en dos sucursales</li>
+    <li>Atomicidad de cambios.</li>
+    <li>Rollback ante inconsistencias.</li>
+    <li>Integridad referencial.</li>
+    <li>Prevención de estados intermedios inválidos.</li>
+</ul>
+
+<hr>
+
+<h2>Manejo de Concurrencia</h2>
+
+<ul>
+    <li>Diseño multiusuario concurrente.</li>
+    <li>Roles: Administrador y Capturista.</li>
+    <li>Operación simultánea en dos sucursales.</li>
+    <li>Prevención de conflictos mediante control de validación previa.</li>
+</ul>
+
+<hr>
+
+<h2>Lógica de Negocio Implementada</h2>
+
+<ul>
+    <li>Validación de campos obligatorios.</li>
+    <li>Detección de clientes duplicados.</li>
+    <li>Control de completitud de expediente.</li>
+    <li>Habilitación manual del estatus de crédito.</li>
+</ul>
+
+<hr>
+
+<h2>Reporting</h2>
+
+<p>
+Implementación de reportes dinámicos utilizando JasperReports
+para generación de documentación relacionada al expediente del cliente.
+</p>
+
+<hr>
+
+<h2>Retos Técnicos Resueltos</h2>
+
+<ul>
+    <li>Integración segura con base de datos en producción.</li>
+    <li>Mantenimiento de consistencia entre sistemas desacoplados.</li>
+    <li>Control de integridad sin modificar lógica interna del ERP.</li>
+    <li>Prevención de corrupción de datos financieros.</li>
 </ul>
 
 <hr>
@@ -94,17 +150,17 @@ pudieran ser habilitados para financiamiento a plazos dentro del ERP.
 <h2>Impacto</h2>
 
 <ul>
-    <li>Reducción de clientes duplicados</li>
-    <li>Mayor control en habilitación de crédito</li>
-    <li>Estandarización de captura de datos</li>
-    <li>Disminución de errores operativos</li>
+    <li>Reducción de clientes duplicados.</li>
+    <li>Mayor control en habilitación de crédito.</li>
+    <li>Estandarización de procesos entre sucursales.</li>
+    <li>Disminución de errores operativos.</li>
 </ul>
 
 <hr>
 
 <p>
-Este proyecto demuestra experiencia en integración ERP, control de integridad de datos
-y manejo de transacciones en entornos empresariales.
+Este proyecto demuestra experiencia en diseño de arquitectura empresarial,
+integración ERP, control transaccional y desarrollo backend en entornos productivos.
 </p>
 
 </body>
